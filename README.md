@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# chart-workload
-Helm chart fluid-workload — Fluid agents/probes workloads on Kubernetes
-=======
 # Helm chart — fluid-workload
 
 Generic chart for **one** Fluid agent or probe image: ConfigMap-mounted YAML config, optional Secret-mounted credentials, extra env.
@@ -14,4 +10,3 @@ Generic chart for **one** Fluid agent or probe image: ConfigMap-mounted YAML con
 - `credentialsSecret` — enable and set `secretName` when the binary reads credential files from disk.
 
 Set `service.enabled` only if the workload exposes a TCP port you need to expose via a Service.
->>>>>>> 68e1e9c (feat: add Helm chart for Fluid workloads)
