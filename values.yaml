@@ -5,6 +5,7 @@ workload:
   # Label-only hint for selectors / docs (e.g. agent, probe)
   kind: workload
 
+# Example image; replace with your agent or probe image and tag at install time.
 image:
   repository: ghcr.io/fluid-pub/fluid-agent-example
   tag: "0.1.0"
