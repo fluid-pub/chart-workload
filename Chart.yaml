@@ -3,4 +3,3 @@ name: fluid-workload
 description: Generic Helm chart for Fluid agents and probes
 type: application
 version: 0.1.0
-appVersion: "0.2.2"

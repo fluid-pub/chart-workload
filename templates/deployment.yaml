@@ -28,7 +28,7 @@ spec:
       {{- end }}
       containers:
         - name: workload
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.service.enabled }}
           ports:
