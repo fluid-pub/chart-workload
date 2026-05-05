@@ -1,0 +1,64 @@
+# Generic workload (agent or probe) — set image, config, and optional credential mounts.
+replicaCount: 1
+
+workload:
+  # Label-only hint for selectors / docs (e.g. agent, probe)
+  kind: workload
+
+image:
+  repository: ghcr.io/fluid-pub/fluid-agent-example
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Main YAML config file mounted read-only (path configurable below)
+config:
+  content: |
+    # Replace with your agent or probe YAML
+
+configMount:
+  # Directory where the ConfigMap is mounted (each data key becomes a file).
+  mountPath: /etc/fluid/config
+  fileName: config.yaml
+
+# Optional: mount a Kubernetes Secret as files (e.g. credentials.yaml)
+credentialsSecret:
+  enabled: false
+  secretName: ""
+  mountPath: /etc/fluid/credentials
+  items: []
+  # items example:
+  # - key: credentials.yaml
+  #   path: credentials.yaml
+
+command: []
+args: []
+
+extraEnv: []
+extraEnvFrom: []
+
+extraVolumeMounts: []
+extraVolumes: []
+
+resources: {}
+
+podAnnotations: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 0
+
+service:
+  enabled: false
+  type: ClusterIP
+  port: 8080
