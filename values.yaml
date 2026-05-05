@@ -7,7 +7,7 @@ workload:
 
 image:
   repository: ghcr.io/fluid-pub/fluid-agent-example
-  tag: "0.1.0"
+  tag: "0.2.2"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

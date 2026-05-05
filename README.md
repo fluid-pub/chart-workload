@@ -1,5 +1,9 @@
 # Helm chart — fluid-workload
 
+In the **`fluid`** monorepo this chart lives under `code/charts/fluid-workload/`; standalone Git (**`fluid-pub/chart-workload`**) uses the same layout at the repository root.
+
+**Release (standalone repo)** — semver tag (**no `v`**) must equal **`version`** in `Chart.yaml` for GHCR OCI publishing; **`oci://ghcr.io/<GitHub-owner>/fluid-workload`**.
+
 Generic chart for **one** Fluid agent or probe image: ConfigMap-mounted YAML config, optional Secret-mounted credentials, extra env.
 
 ## Typical values
