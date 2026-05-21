@@ -16,10 +16,17 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-# Main YAML config file mounted read-only (path configurable below)
+# Config files mounted under configMount.mountPath (one file per key).
+# Prefer config.files for multiple files (e.g. config.yaml + schema.yml for probes).
+# Legacy: config.content sets the main file; config.schemaContent adds schema.yml (override).
 config:
+  files: {}
   content: |
     # Replace with your agent or probe YAML
+  # Probes: bake config/schema.yml in the image (Dockerfile); set true to mount only the main file.
+  schemaInImage: false
+  # Optional override when schema is not baked in the image (dev / legacy).
+  schemaContent: ""
 
 configMount:
   # Directory where the ConfigMap is mounted (each data key becomes a file).

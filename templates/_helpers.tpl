@@ -33,3 +33,36 @@ fluid.io/workload-kind: {{ .Values.workload.kind | quote }}
 app.kubernetes.io/name: {{ include "fluid-workload.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+  Build ConfigMap data: filename -> file content.
+  Prefer config.files; legacy config.content + optional config.schemaContent remain supported.
+*/}}
+{{- define "fluid-workload.configFiles" -}}
+{{- $files := default dict .Values.config.files -}}
+{{- if .Values.config.content -}}
+{{- $main := default "config.yaml" .Values.configMount.fileName -}}
+{{- $files = merge $files (dict $main .Values.config.content) -}}
+{{- end -}}
+{{- if .Values.config.schemaContent | trim -}}
+{{- $files = merge $files (dict "schema.yml" .Values.config.schemaContent) -}}
+{{- end -}}
+{{- $files | toYaml -}}
+{{- end }}
+
+{{/*
+  When true, mount only the main config file (subPath) so schema.yml from the image
+  (probe semver) stays at configMount.mountPath/schema.yml.
+*/}}
+{{- define "fluid-workload.configMountSubPath" -}}
+{{- if not .Values.config.schemaInImage -}}
+false
+{{- else -}}
+{{- $files := fromYaml (include "fluid-workload.configFiles" .) -}}
+{{- if eq (len $files) 1 -}}
+true
+{{- else -}}
+false
+{{- end -}}
+{{- end -}}
+{{- end }}

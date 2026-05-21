@@ -5,5 +5,8 @@ metadata:
   labels:
     {{- include "fluid-workload.labels" . | nindent 4 }}
 data:
-  {{ .Values.configMount.fileName }}: |
-{{ .Values.config.content | nindent 4 }}
+{{- $files := fromYaml (include "fluid-workload.configFiles" .) }}
+{{- range $name, $content := $files }}
+  {{ $name }}: |
+{{ $content | nindent 4 }}
+{{- end }}

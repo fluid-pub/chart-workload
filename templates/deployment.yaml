@@ -45,9 +45,16 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if eq (include "fluid-workload.configMountSubPath" .) "true" }}
+            - name: config
+              mountPath: {{ .Values.configMount.mountPath }}/{{ .Values.configMount.fileName }}
+              subPath: {{ .Values.configMount.fileName }}
+              readOnly: true
+            {{- else }}
             - name: config
               mountPath: {{ .Values.configMount.mountPath }}
               readOnly: true
+            {{- end }}
             {{- if .Values.credentialsSecret.enabled }}
             - name: credentials
               mountPath: {{ .Values.credentialsSecret.mountPath }}
