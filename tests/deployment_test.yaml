@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: deployment
+templates:
+  - deployment.yaml
+tests:
+  - it: should render Deployment with workload labels
+    values:
+      - ./data/test_values.yaml
+    asserts:
+      - isKind:
+          of: Deployment
+      - equal:
+          path: metadata.labels["fluid.io/workload-kind"]
+          value: probe
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/fluid-pub/probe-example:0.1.0
+
+  - it: should mount config directory when schemaInImage is false
+    values:
+      - ./data/test_values.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].mountPath
+          value: /etc/fluid/config
+      - notExists:
+          path: spec.template.spec.containers[0].volumeMounts[0].subPath
+
+  - it: should mount main config with subPath when schemaInImage is true and single file
+    values:
+      - ./data/test_values.yaml
+    set:
+      config.schemaInImage: true
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].mountPath
+          value: /etc/fluid/config/config.yaml
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].subPath
+          value: config.yaml
+
+  - it: should not expose container ports when service is disabled
+    values:
+      - ./data/test_values.yaml
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].ports
+
+  - it: should expose container port when service is enabled
+    values:
+      - ./data/test_values.yaml
+    set:
+      service.enabled: true
+      service.port: 9090
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 9090
+
+  - it: should mount credentials secret when enabled
+    values:
+      - ./data/test_values.yaml
+    set:
+      credentialsSecret.enabled: true
+      credentialsSecret.secretName: probe-credentials
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            name: credentials
+            secret:
+              secretName: probe-credentials
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: credentials
+            mountPath: /etc/fluid/credentials
+            readOnly: true

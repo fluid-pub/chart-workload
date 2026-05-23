@@ -1,0 +1,37 @@
+replicaCount: 1
+
+workload:
+  kind: probe
+
+image:
+  repository: ghcr.io/fluid-pub/probe-example
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+config:
+  files: {}
+  content: |
+    name: example-probe
+  schemaInImage: false
+  schemaContent: ""
+
+configMount:
+  mountPath: /etc/fluid/config
+  fileName: config.yaml
+
+credentialsSecret:
+  enabled: false
+  secretName: ""
+  mountPath: /etc/fluid/credentials
+  items: []
+
+service:
+  enabled: false
+  type: ClusterIP
+  port: 8080
+
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 0

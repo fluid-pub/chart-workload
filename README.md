@@ -52,3 +52,12 @@ extraEnvFrom:
 - `image.repository` / `image.tag` — workload image (GHCR).
 - `credentialsSecret` — optional file-based credentials mount.
 - `service.enabled` — only if the workload exposes HTTP.
+
+## Chart tests
+
+```bash
+helm plugin install https://github.com/helm-unittest/helm-unittest --version v0.6.3 --verify=false
+helm unittest .
+```
+
+See [`tests/README.md`](tests/README.md). CI runs `helm lint` and `helm unittest .` on pull requests.

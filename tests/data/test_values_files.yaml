@@ -1,0 +1,28 @@
+replicaCount: 1
+
+workload:
+  kind: agent
+
+image:
+  repository: ghcr.io/fluid-pub/fluid-agent-example
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+config:
+  files:
+    agent.yml: |
+      agent: custom
+  content: |
+    ignored: true
+  schemaInImage: false
+  schemaContent: ""
+
+configMount:
+  mountPath: /etc/fluid/config
+  fileName: config.yaml
+
+credentialsSecret:
+  enabled: false
+
+service:
+  enabled: false

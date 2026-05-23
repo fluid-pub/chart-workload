@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configmap
+templates:
+  - configmap.yaml
+tests:
+  - it: should render ConfigMap from legacy config.content
+    values:
+      - ./data/test_values.yaml
+    asserts:
+      - isKind:
+          of: ConfigMap
+      - matchRegex:
+          path: metadata.name
+          pattern: -config$
+      - matchRegex:
+          path: data["config.yaml"]
+          pattern: "name: example-probe"
+
+  - it: should include schema.yml when schemaContent is set
+    values:
+      - ./data/test_values.yaml
+    set:
+      config.schemaContent: 'version: "1"'
+    asserts:
+      - matchRegex:
+          path: data["schema.yml"]
+          pattern: 'version: "1"'
+
+  - it: should prefer config.files over legacy content
+    values:
+      - ./data/test_values_files.yaml
+    asserts:
+      - matchRegex:
+          path: data["agent.yml"]
+          pattern: "agent: custom"
+      - notExists:
+          path: data.config.yaml
