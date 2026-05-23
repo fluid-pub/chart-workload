@@ -5,7 +5,7 @@ In the **`fluid`** monorepo this chart lives under `code/charts/fluid-workload/`
 **Release** — push a semver tag **without `v`** matching **`version`** in **`Chart.yaml`** to publish **`oci://ghcr.io/fluid-pub/fluid-workload/fluid-workload:<tag>`**.
 
 ```text
-helm pull oci://ghcr.io/fluid-pub/fluid-workload/fluid-workload --version 0.1.1
+helm pull oci://ghcr.io/fluid-pub/fluid-workload/fluid-workload --version 0.2.0
 ```
 
 Generic chart for **one** Fluid agent or probe image: ConfigMap-mounted YAML, optional Secret/env credentials.
